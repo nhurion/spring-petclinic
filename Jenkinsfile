@@ -17,7 +17,7 @@ pipeline {
       }
       stage('Docker build') {
          steps {
-             sh 'docker build -t nhurion/petclinic-depoy ./src/main/docker/'
+             sh 'docker build -t nhurion/petclinic-depoy .'
          }
       }
    }
