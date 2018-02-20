@@ -3,7 +3,7 @@ node {
 
    stage('Clone Repository') {
         // Get some code from a GitHub repository
-        git 'https://github.com/denisdbell/spring-petclinic.git'
+        git 'https://github.com/nhurion/spring-petclinic.git'
     
    }
    stage('Build Maven Image') {
@@ -24,7 +24,7 @@ node {
          //Remove maven-build-container if it exisits
         sh " docker rm -f java-deploy-container"
        
-        sh "docker run --name java-deploy-container --volumes-from maven-build-container -d -p 8080:8080 denisdbell/petclinic-deploy"
+        sh "docker run --name java-deploy-container --volumes-from maven-build-container -d -p 8080:8090 nhurion/petclinic-deploy"
    }
 
 }
