@@ -11,8 +11,19 @@ pipeline {
       stage('Build') {
          steps {
             sh 'mvn clean package'
+            
+            def pom = readMavenPom file:'pom.xml'
+            print pom.version
+            env.version = pom.version
+            
             junit '**/target/surefire-reports/TEST-*.xml'
          }
       }
+      stage('Image') {
+            steps {
+                def app = docker.build "localhost:5000/petclinic-deploy:${env.version}"
+                app.push()
+            }
+        }
    }
 }
