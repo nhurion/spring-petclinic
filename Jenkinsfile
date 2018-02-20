@@ -1,4 +1,3 @@
-
 pipeline {
    agent any
    stages {
@@ -18,7 +17,7 @@ pipeline {
       }
       stage('Docker build') {
          steps {
-             sh 'docker build -t nhurion/petclinic-deply .'
+             sh 'docker build -t nhurion/petclinic-depoy ./src/main/docker/'
          }
       }
    }
