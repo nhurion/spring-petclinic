@@ -1,6 +1,6 @@
 
 pipeline {
-   agent {docker 'maven:3.5-alpine'}
+   agent any
    stages {
       stage('Clone Repository') {
          steps {
@@ -9,6 +9,7 @@ pipeline {
          }
       }
       stage('Build') {
+         agent {docker 'maven:3.5-alpine'}
          steps {
             sh 'mvn clean package'
             junit '**/target/surefire-reports/TEST-*.xml'
@@ -17,7 +18,7 @@ pipeline {
       }
       stage('Docker build') {
          steps {
-             sh "docker build -t nhurion/petclinic-deply ."
+             sh 'docker build -t nhurion/petclinic-deply .'
          }
       }
    }
