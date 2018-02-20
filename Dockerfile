@@ -1,13 +1,5 @@
-
-FROM maven:3.5-jdk-8
-
-RUN mkdir -p /deploy/application
-
-VOLUME ["/deploy/application"]
-
-WORKDIR /deploy/application
-
-ADD . .
-
-ENTRYPOINT ["mvn","clean","package"]
-
+FROM frolvlad/alpine-oraclejdk8:slim
+VOLUME /tmp
+VOLUME /log
+ADD spring-petclinic*.jar app.jar
+ENTRYPOINT [ "sh", "-c", "java -jar /app.jar" ]
