@@ -11,11 +11,7 @@ pipeline {
       stage('Build') {
          steps {
             sh 'mvn clean package'
-            
-            def pom = readMavenPom file:'pom.xml'
-            print pom.version
-            env.version = pom.version
-            
+
             junit '**/target/surefire-reports/TEST-*.xml'
          }
       }
