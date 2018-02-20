@@ -19,11 +19,6 @@ pipeline {
             junit '**/target/surefire-reports/TEST-*.xml'
          }
       }
-      stage('Image') {
-            steps {
-                def app = docker.build "localhost:5000/petclinic-deploy:${env.version}"
-                app.push()
-            }
-        }
+     
    }
 }
