@@ -19,9 +19,7 @@ pipeline {
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
-                sshagent (credentials: ['deploy_ssh']) {
-                  sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/pet/'
-                }
+               sh 'cp target/*.jar /opt/dump/'
          }
       }
    }
