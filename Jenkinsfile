@@ -26,7 +26,7 @@ pipeline {
                 }
                sh 'ls -la'
                sshagent (credentials: ['deploy_ssh']) {
-                 sh 'scp /target/*.jar deploy@46.226.109.170:/home/deploy/'
+                 sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/'
                  sh "ssh deploy@46.226.109.170 'env SERVER.PORT=8090 nohup java -jar /home/deploy/spring-petclinic-1.5.1.jar &'"
                }
          }
