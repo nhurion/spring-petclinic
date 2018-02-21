@@ -21,9 +21,9 @@ pipeline {
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
-               dir("target") {
+               //dir("target") {
                     unstash "target"
-                }
+                //}
                sh 'ls -la'
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
