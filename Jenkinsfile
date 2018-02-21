@@ -15,9 +15,9 @@ pipeline {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint:true
          }
       }
-      stage('Docker build') {
+      stage('Deploy') {
          steps {
-             sh 'docker build -t nhurion/petclinic-depoy .'
+             echo 'deploying...'
          }
       }
    }
