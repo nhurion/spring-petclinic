@@ -22,7 +22,7 @@ pipeline {
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
-               sh 'scp target/*.jar $DEPLOY@46.226.109.170:/home/$DEPLOY_USR/pet/'
+               sh 'scp target/*.jar $DEPLOY_USR@46.226.109.170:/home/$DEPLOY_USR/pet/'
          }
       }
    }
