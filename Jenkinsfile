@@ -21,6 +21,9 @@ pipeline {
                echo 'deploying...'
                sh 'ls -la'
                sh 'cp target/*.jar /opt/dump/'
+               sshagent (credentials: ['deploy_ssh']) {
+                 sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/'
+               }
          }
       }
    }
