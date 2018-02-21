@@ -16,10 +16,13 @@ pipeline {
          }
       }
       stage('Deploy') {
+         environment { 
+                DEPLOY = credentials('deploy') 
+            }
          steps {
                input 'Do you approve the deployment?'
                echo 'deploying...'
-               sh 'scp target/*.jar $USERNAME:$PASSWORD@ci.hurion.be:/home/$USERNAME/pet/'
+               sh 'scp target/*.jar $DEPLOY@ci.hurion.be:/home/$DEPLOY_USR/pet/'
          }
       }
    }
