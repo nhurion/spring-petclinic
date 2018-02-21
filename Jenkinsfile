@@ -23,6 +23,7 @@ pipeline {
                echo 'deploying...'
                sh 'ls -la'
                sshagent (credentials: ['deploy_ssh']) {
+                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
                  sh 'scp /opt/dump/*.jar deploy@46.226.109.170:/home/deploy/'
                }
          }
