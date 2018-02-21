@@ -16,14 +16,12 @@ pipeline {
          }
       }
       stage('Deploy') {
-         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '<CREDENTIAL_ID>',
-                           usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-            steps {
-                input 'Do you approve the deployment?'
-                echo 'deploying...'
-                sh 'scp target/*.jar $USERNAME:$PASSWORD@ci.hurion.be:/home/$USERNAME/pet/'
-             }
-         }
+                  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'deploy',
+                             usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+               input 'Do you approve the deployment?'
+               echo 'deploying...'
+          sh 'scp target/*.jar $USERNAME:$PASSWORD@ci.hurion.be:/home/$USERNAME/pet/'
+            }
       }
    }
 }
