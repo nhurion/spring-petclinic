@@ -16,7 +16,7 @@ pipeline {
          }
       }
       stage('Deploy') {
-         agent linux
+         agent any
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
