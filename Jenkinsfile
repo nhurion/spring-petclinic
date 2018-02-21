@@ -1,5 +1,5 @@
 pipeline {
-   agent  {docker 'maven:3.5-alpine'}
+   agent any
    stages {
       stage('Clone Repository') {
          steps {
@@ -9,6 +9,7 @@ pipeline {
       }
       stage('Build') {
          //If docker agent used here, target directory disapear after build...
+         agent  {docker 'maven:3.5-alpine'}
          steps {
             sh 'mvn clean package'
             junit '**/target/surefire-reports/TEST-*.xml'
@@ -16,14 +17,13 @@ pipeline {
          }
       }
       stage('Deploy') {
-         agent any
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
                sh 'ls -la'
                sh 'cp target/*.jar /opt/dump/'
                sshagent (credentials: ['deploy_ssh']) {
-                 sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/'
+                 sh 'scp /opt/dump/*.jar deploy@46.226.109.170:/home/deploy/'
                }
          }
       }
