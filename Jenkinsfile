@@ -19,6 +19,8 @@ pipeline {
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
+               sh 'ls -la'
+               pwd()
                sh 'cp target/*.jar /opt/dump/'
          }
       }
