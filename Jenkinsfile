@@ -8,6 +8,7 @@ pipeline {
          }
       }
       stage('Build') {
+         //If docker agent used here, target directory disapear after build...
          steps {
             sh 'mvn clean package'
             junit '**/target/surefire-reports/TEST-*.xml'
