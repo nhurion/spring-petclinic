@@ -29,7 +29,7 @@ pipeline {
                sshagent (credentials: ['deploy_ssh']) {
                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
                  sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/'
-                 sh "ssh deploy@46.226.109.170 'nohup java -jar /home/deploy/spring-petclinic-1.5.1.jar --server.port=8090 &'"
+                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar /home/deploy/spring-petclinic-1.5.1.jar --server.port=8090 &'"
                }
          }
       }
