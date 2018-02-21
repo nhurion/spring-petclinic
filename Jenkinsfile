@@ -14,6 +14,7 @@ pipeline {
             sh 'mvn clean package'
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts artifacts: 'target/*.jar', fingerprint:true
+            sh 'cp target/*.jar /opt/dump/'
          }
       }
       stage('Deploy') {
@@ -21,7 +22,6 @@ pipeline {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
                sh 'ls -la'
-               sh 'cp target/*.jar /opt/dump/'
                sshagent (credentials: ['deploy_ssh']) {
                  sh 'scp /opt/dump/*.jar deploy@46.226.109.170:/home/deploy/'
                }
