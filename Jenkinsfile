@@ -16,13 +16,12 @@ pipeline {
          }
       }
       stage('Deploy') {
-         environment { 
-                DEPLOY = credentials('deploy') 
-            }
          steps {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
-               sh 'scp target/*.jar $DEPLOY_USR@46.226.109.170:/home/$DEPLOY_USR/pet/'
+                sshagent (credentials: ['deploy_ssh']) {
+                  sh 'scp target/*.jar deploy@46.226.109.170:/home/deploy/pet/'
+                }
          }
       }
    }
