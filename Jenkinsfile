@@ -20,9 +20,9 @@ pipeline {
                 DEPLOY = credentials('deploy') 
             }
          steps {
-               input 'Do you approve the deployment?'
+               //input 'Do you approve the deployment?'
                echo 'deploying...'
-               sh 'scp target/*.jar $DEPLOY@ci.hurion.be:/home/$DEPLOY_USR/pet/'
+               sh 'scp target/*.jar $DEPLOY@46.226.109.170:/home/$DEPLOY_USR/pet/'
          }
       }
    }
