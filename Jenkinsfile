@@ -30,8 +30,10 @@ pipeline {
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
+                 sh "ssh kill `cat  ${filePath}/pet.pid` || true"
                  sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
                  sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar &'"
+                 sh "ssh -f echo '$!' > ${filePath}/pet.pid"
                }
          }
        }
@@ -42,7 +44,7 @@ pipeline {
              }
              sh 'sleep 60'
              sh "curl --retry-delay 10 --retry 5 http://46.226.109.170:8090/manage/info -o ${workspacePath}/info.json"
-             archiveArtifacts artifacts: "${workspacePath}/info.json", fingerprint:true
+             archiveArtifacts artifacts: "info.json", fingerprint:true
          }
       }
    }
