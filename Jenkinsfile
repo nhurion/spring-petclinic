@@ -32,7 +32,7 @@ pipeline {
                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
                  sh "ssh -f deploy@46.226.109.170 'kill `cat  ${filePath}/pet.pid` || true' "
                  sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
-                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & echo \"\$!\" > ${filePath}pet.pid''"
+                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & echo \"\$!\" > ${filePath}pet.pid'"
 //                 sh "ssh -f deploy@46.226.109.170 'echo \"\$!\" > ${filePath}pet.pid'"
                }
          }
