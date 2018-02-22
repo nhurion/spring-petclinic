@@ -11,16 +11,16 @@ pipeline {
            git 'https://github.com/nhurion/spring-petclinic.git'
          }
       }
-//      stage('Build') {
-//         //If docker agent used here, target directory disapear after build...
-//         agent  {docker 'maven:3.5-alpine'}
-//         steps {
-//            sh 'mvn clean package'
-//            junit '**/target/surefire-reports/TEST-*.xml'
-//            archiveArtifacts artifacts: 'target/*.jar', fingerprint:true
-//            stash name: "target", includes: "target/*"
-//         }
-//      }
+      stage('Build') {
+         //If docker agent used here, target directory disapear after build...
+         agent  {docker 'maven:3.5-alpine'}
+         steps {
+            sh 'mvn clean package -T2'
+            junit '**/target/surefire-reports/TEST-*.xml'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint:true
+            stash name: "target", includes: "target/*"
+         }
+      }
        stage('Deploy Dev') {
            steps {
                script {
