@@ -30,6 +30,7 @@ pipeline {
                  sh "ssh -f deploy@46.226.109.170 'nohup java -jar /opt/projects/dev/pet/spring-petclinic-1.5.1.jar &'"
                }
          }
+       }
       stage('Smoketest') {
          steps {
              def workspacePath = pwd()
@@ -38,5 +39,4 @@ pipeline {
          }
       }
    }
-}
 }
