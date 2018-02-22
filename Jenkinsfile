@@ -20,7 +20,7 @@ pipeline {
       stage('Deploy') {
          steps {
             script {
-                filePath=/opt/projects/dev/pet/
+                filePath = '/opt/projects/dev/pet/'
             }
                //input 'Do you approve the deployment?'
                echo 'deploying...'
