@@ -28,9 +28,13 @@ pipeline {
                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
                  sh 'scp target/*.jar deploy@46.226.109.170:/opt/projects/dev/pet/'
                  sh "ssh -f deploy@46.226.109.170 'nohup java -jar /opt/projects/dev/pet/spring-petclinic-1.5.1.jar &'"
-                 sh 'while ! httping -qc1 http://ci.hurion.be:8090 ; do sleep 1 ; done'
                }
          }
+      stage('Smoketest') {
+         def workspacePath = pwd()
+         sh "curl --retry-delay 10 --retry 5 http://46.226.109.170:8090/info -o ${workspacePath}/info.json"
+         archiveArtifacts artifacts: '${workspacePath}/info.json', fingerprint:true
+
       }
    }
 }
