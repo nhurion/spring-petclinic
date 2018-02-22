@@ -42,7 +42,7 @@ pipeline {
              }
              sh 'sleep 60'
              sh "curl --retry-delay 10 --retry 5 http://46.226.109.170:8090/manage/info -o ${workspacePath}/info.json"
-             archiveArtifacts artifacts: '${workspacePath}/info.json', fingerprint:true
+             archiveArtifacts artifacts: "${workspacePath}/info.json", fingerprint:true
          }
       }
    }
