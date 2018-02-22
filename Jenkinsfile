@@ -61,7 +61,7 @@ pipeline {
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
                    sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo hello'"
-                   sh "ssh -f deploy@46.226.109.170 'ps -ef | grep pet | grep test | grep -v grep | awk \'{print \$2}\' | xargs kill || true' "
+                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f test/pet || true' "
                    sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
                    sh "ssh -f deploy@46.226.109.170 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
                }
