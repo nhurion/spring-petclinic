@@ -33,7 +33,7 @@ pipeline {
                  sh "ssh kill `cat  ${filePath}/pet.pid` || true"
                  sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
                  sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar &'"
-                 sh "ssh -f echo '$!' > ${filePath}/pet.pid"
+                 sh "ssh -f echo '\$!' > ${filePath}/pet.pid"
                }
          }
        }
