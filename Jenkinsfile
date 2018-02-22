@@ -20,7 +20,8 @@ pipeline {
       stage('Deploy') {
          steps {
             script {
-                filePath = '/opt/projects/dev/pet/'
+                //filePath = '/opt/projects/dev/pet/'
+                filePath = '/home/deploy/'
             }
                //input 'Do you approve the deployment?'
                echo 'deploying...'
@@ -30,7 +31,7 @@ pipeline {
                sshagent (credentials: ['deploy_ssh']) {
                  sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
                  sh 'scp target/*.jar deploy@46.226.109.170:${filePath}'
-                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}/spring-petclinic-1.5.1.jar &'"
+                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar &'"
                }
          }
        }
