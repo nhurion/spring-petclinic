@@ -1,5 +1,7 @@
 #!groovy
 
+
+
 pipeline {
    agent any
    stages {
@@ -19,35 +21,63 @@ pipeline {
             stash name: "target", includes: "target/*"
          }
       }
-      stage('Deploy') {
-         steps {
-            script {
-                filePath = '/opt/projects/dev/pet/'
-                //filePath = '/home/deploy/'
-            }
+       stage('Deploy Dev') {
+           steps {
+               script {
+                   filePath = '/opt/projects/dev/pet/'
+                   //filePath = '/home/deploy/'
+               }
                //input 'Do you approve the deployment?'
                echo 'deploying...'
                unstash "target"
                sh 'ls -la'
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
-                 sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
-                 sh "ssh -f deploy@46.226.109.170 'kill `cat  ${filePath}pet.pid` || true' "
-                 sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
-                 sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & echo \"\$!\" > ${filePath}pet.pid'"
-//                 sh "ssh -f deploy@46.226.109.170 'echo \"\$!\" > ${filePath}pet.pid'"
+                   sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
+                   sh "ssh -f deploy@46.226.109.170 'kill `cat  ${filePath}pet.pid` || true' "
+                   sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
+                   sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & echo \"\$!\" > ${filePath}pet.pid'"
                }
-         }
+           }
        }
-      stage('Smoketest') {
-         steps {
-             script{
-                workspacePath = pwd()
-             }
-             sh 'sleep 60'
-             sh "curl --retry-delay 10 --retry 5 http://46.226.109.170:8090/manage/info -o ${workspacePath}/info.json"
-             archiveArtifacts artifacts: "info.json", fingerprint:true
-         }
-      }
+       stage('Smoke test dev') {
+           steps {
+               script{
+                   workspacePath = pwd()
+               }
+               sh 'sleep 60'
+               sh "curl --retry-delay 10 --retry 5 http://pet.dev.hurion.be/manage/info -o ${workspacePath}/info-dev.json"
+               archiveArtifacts artifacts: "info-dev.json", fingerprint:true
+           }
+       }
+       stage('Deploy Test') {
+           steps {
+               script {
+                   filePath = '/opt/projects/test/pet/'
+                   //filePath = '/home/deploy/'
+               }
+               input 'Do you approve the deployment to test?'
+               echo 'deploying...'
+               unstash "target"
+               sh 'ls -la'
+               sh 'ls ./target -la'
+               sshagent (credentials: ['deploy_ssh']) {
+                   sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo $HOME'"
+                   sh "ssh -f deploy@46.226.109.170 'kill `cat  ${filePath}pet.pid` || true' "
+                   sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
+                   sh "ssh -f deploy@46.226.109.170 'nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & echo \"\$!\" > ${filePath}pet.pid'"
+               }
+           }
+       }
+       stage('Smoke test test') {
+           steps {
+               script{
+                   workspacePath = pwd()
+               }
+               sh 'sleep 60'
+               sh "curl --retry-delay 10 --retry 5 http://pet.test.hurion.be/manage/info -o ${workspacePath}/info-test.json"
+               archiveArtifacts artifacts: "info-test.json", fingerprint:true
+           }
+       }
    }
 }
