@@ -33,19 +33,7 @@ pipeline {
                deploymentEnvironment = 'dev'
            }
            steps {
-               script {
-                   filePath = "/opt/projects/${deploymentEnvironment}/${projectName}/"
-               }
-               //input 'Do you approve the deployment?'
-               echo 'deploying...'
-               deploy "${projectName} on  ${deploymentEnvironment}"
-               unstash "target"
-               sshagent (credentials: ['deploy_ssh']) {
-                   sh "ssh -o StrictHostKeyChecking=no deploy@${deploymentServer} 'echo hello'"
-                   sh "ssh -f deploy@${deploymentServer} 'pkill -e -f ${deploymentEnvironment}/${projectName} || true' "
-                   sh "scp target/*.jar deploy@${deploymentServer}:${filePath}"
-                   sh "ssh -f deploy@${deploymentServer} 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
-               }
+               deploy ${projectName} "spring-petclinic-1.5.1.jar"
            }
        }
        stage('Smoke test dev') {
