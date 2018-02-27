@@ -28,7 +28,14 @@ pipeline {
             stash name: "target", includes: "target/*"
          }
       }
-       deploy(${projectName}, 'spring-petclinic-1.5.1.jar', 'dev')
+       stage('Deploy Dev') {
+           environment {
+               deploymentEnvironment = 'dev'
+           }
+           steps {
+               deploy (${projectName}, "spring-petclinic-1.5.1.jar", dev)
+           }
+       }
        stage('Smoke test dev') {
            environment {
                deploymentEnvironment = 'dev'
