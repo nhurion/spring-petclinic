@@ -53,7 +53,7 @@ pipeline {
                 input "Release and deploy to prod?"
             }
         }
-        Stage('Release') {
+        stage('Release') {
             steps {
                 echo 'releasing'
             }
