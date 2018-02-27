@@ -33,7 +33,7 @@ pipeline {
                deploymentEnvironment = 'dev'
            }
            steps {
-               deploy (${projectName}, "spring-petclinic-1.5.1.jar", dev)
+               deploy ("${projectName}", "spring-petclinic-1.5.1.jar", "dev")
            }
        }
        stage('Smoke test dev') {
