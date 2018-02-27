@@ -19,7 +19,7 @@ pipeline {
          }
       }
       stage('Build') {
-         //If docker agent used here, target directory disapear after build...
+         //If docker agent used here, target directory disappear after build, so stash what you need to keep.
          agent  {docker 'maven:3.5-alpine'}
          steps {
             sh 'mvn clean package -T2'
