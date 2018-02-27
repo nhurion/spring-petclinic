@@ -4,6 +4,11 @@
 
 pipeline {
    agent any
+
+    environment {
+        projectName = 'pet'
+    }
+
    stages {
       stage('Clone Repository') {
          steps {
@@ -24,7 +29,7 @@ pipeline {
        stage('Deploy Dev') {
            steps {
                script {
-                   filePath = '/opt/projects/dev/pet/'
+                   filePath = "/opt/projects/dev/${projectName}/"
                }
                //input 'Do you approve the deployment?'
                echo 'deploying...'
@@ -33,7 +38,7 @@ pipeline {
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
                    sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo hello'"
-                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f dev/pet || true' "
+                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f dev/${projectName} || true' "
                    sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
                    sh "ssh -f deploy@46.226.109.170 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
                }
@@ -45,14 +50,14 @@ pipeline {
                    workspacePath = pwd()
                }
                sh 'sleep 60'
-               sh "curl --retry-delay 10 --retry 5 http://pet.dev.hurion.be/manage/info -o ${workspacePath}/info-dev.json"
+               sh "curl --retry-delay 10 --retry 5 http://${projectName}.dev.hurion.be/manage/info -o ${workspacePath}/info-dev.json"
                archiveArtifacts artifacts: "info-dev.json", fingerprint:true
            }
        }
        stage('Deploy Test') {
            steps {
                script {
-                   filePath = '/opt/projects/test/pet/'
+                   filePath = "/opt/projects/test/${projectName}/"
                }
                //input 'Do you approve the deployment to test?'
                echo 'deploying...'
@@ -61,7 +66,7 @@ pipeline {
                sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
                    sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo hello'"
-                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f test/pet || true' "
+                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f test/${projectName} || true' "
                    sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
                    sh "ssh -f deploy@46.226.109.170 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
                }
@@ -73,7 +78,7 @@ pipeline {
                    workspacePath = pwd()
                }
                sh 'sleep 60'
-               sh "curl --retry-delay 10 --retry 5 http://pet.test.hurion.be/manage/info -o ${workspacePath}/info-test.json"
+               sh "curl --retry-delay 10 --retry 5 http://${projectName}.test.hurion.be/manage/info -o ${workspacePath}/info-test.json"
                archiveArtifacts artifacts: "info-test.json", fingerprint:true
            }
        }
