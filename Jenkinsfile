@@ -50,12 +50,16 @@ pipeline {
         }
         stage('Ready for prod') {
             steps {
-                input "Release and deploy to prod?"
+                script {
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
+                }
+                echo "${env.RELEASE_SCOPE}"
             }
         }
         stage('Release') {
             steps {
-                echo 'releasing'
+                echo "releasing ${env.RELEASE_SCOPE}"
             }
         }
         stage('Deploy Prod') {
