@@ -1,6 +1,6 @@
 #!groovy
 
-
+@Library('nhu') _
 
 pipeline {
    agent any
@@ -38,6 +38,7 @@ pipeline {
                }
                //input 'Do you approve the deployment?'
                echo 'deploying...'
+               deploy "${projectName} on  ${deploymentEnvironment}"
                unstash "target"
                sshagent (credentials: ['deploy_ssh']) {
                    sh "ssh -o StrictHostKeyChecking=no deploy@${deploymentServer} 'echo hello'"
