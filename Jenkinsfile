@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         projectName = 'pet'
+        deploymentServer = '46.226.109.170'
     }
 
    stages {
@@ -34,13 +35,11 @@ pipeline {
                //input 'Do you approve the deployment?'
                echo 'deploying...'
                unstash "target"
-               sh 'ls -la'
-               sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
-                   sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo hello'"
-                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f dev/${projectName} || true' "
-                   sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
-                   sh "ssh -f deploy@46.226.109.170 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
+                   sh "ssh -o StrictHostKeyChecking=no deploy@${deploymentServer} 'echo hello'"
+                   sh "ssh -f deploy@${deploymentServer} 'pkill -e -f dev/${projectName} || true' "
+                   sh "scp target/*.jar deploy@${deploymentServer}:${filePath}"
+                   sh "ssh -f deploy@${deploymentServer} 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
                }
            }
        }
@@ -62,13 +61,11 @@ pipeline {
                //input 'Do you approve the deployment to test?'
                echo 'deploying...'
                unstash "target"
-               sh 'ls -la'
-               sh 'ls ./target -la'
                sshagent (credentials: ['deploy_ssh']) {
-                   sh "ssh -o StrictHostKeyChecking=no deploy@46.226.109.170 'echo hello'"
-                   sh "ssh -f deploy@46.226.109.170 'pkill -e -f test/${projectName} || true' "
-                   sh "scp target/*.jar deploy@46.226.109.170:${filePath}"
-                   sh "ssh -f deploy@46.226.109.170 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
+                   sh "ssh -o StrictHostKeyChecking=no deploy@${deploymentServer} 'echo hello'"
+                   sh "ssh -f deploy@${deploymentServer} 'pkill -e -f test/${projectName} || true' "
+                   sh "scp target/*.jar deploy@${deploymentServer}:${filePath}"
+                   sh "ssh -f deploy@${deploymentServer} 'cd ${filePath} && nohup java -jar ${filePath}spring-petclinic-1.5.1.jar & '"
                }
            }
        }
