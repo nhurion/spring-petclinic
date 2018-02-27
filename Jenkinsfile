@@ -48,5 +48,21 @@ pipeline {
                 smokeTest("${projectName}", "test")
             }
         }
+        stage('Ready for prod') {
+            input "Release and deploy to prod?"
+        }
+        Stage('Release') {
+            echo 'releasing'
+        }
+        stage('Deploy Prod') {
+            steps {
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "prod")
+            }
+        }
+        stage('Smoke test Prod') {
+            steps {
+                smokeTest("${projectName}", "prod")
+            }
+        }
     }
 }
