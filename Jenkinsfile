@@ -49,10 +49,14 @@ pipeline {
             }
         }
         stage('Ready for prod') {
-            input "Release and deploy to prod?"
+            steps {
+                input "Release and deploy to prod?"
+            }
         }
         Stage('Release') {
-            echo 'releasing'
+            steps {
+                echo 'releasing'
+            }
         }
         stage('Deploy Prod') {
             steps {
