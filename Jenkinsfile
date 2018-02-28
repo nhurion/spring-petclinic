@@ -28,17 +28,19 @@ pipeline {
                 stash name: "target", includes: "target/*"
             }
         }
-        parallel {
-            stage('Deploy Dev') {
-                steps {
-                    deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
-                    smokeTest("${projectName}", "dev")
+        stage("Deploy dev") {
+            parallel {
+                stage('Deploy Dev') {
+                    steps {
+                        deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
+                        smokeTest("${projectName}", "dev")
+                    }
                 }
-            }
-            stage('Deploy Staging') {
-                steps {
-                    deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
-                    smokeTest("${projectName}", "test")
+                stage('Deploy Staging') {
+                    steps {
+                        deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
+                        smokeTest("${projectName}", "test")
+                    }
                 }
             }
         }
