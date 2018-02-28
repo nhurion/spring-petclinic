@@ -31,44 +31,27 @@ pipeline {
         stage('Deploy Dev') {
             steps {
                 deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
-            }
-        }
-        stage('Smoke test dev') {
-            steps {
                 smokeTest("${projectName}", "dev")
             }
         }
         stage('Deploy Staging') {
             steps {
                 deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
-            }
-        }
-        stage('Smoke test Staging') {
-            steps {
                 smokeTest("${projectName}", "test")
             }
         }
-        stage('Ready for prod') {
+        stage('Release') {
             steps {
                 script {
                     env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
                 }
-                echo "${env.RELEASE_SCOPE}"
-            }
-        }
-        stage('Release') {
-            steps {
                 echo "releasing ${env.RELEASE_SCOPE}"
             }
         }
         stage('Deploy Prod') {
             steps {
                 deploy("${projectName}", "spring-petclinic-1.5.1.jar", "prod")
-            }
-        }
-        stage('Smoke test Prod') {
-            steps {
                 smokeTest("${projectName}", "prod")
             }
         }
