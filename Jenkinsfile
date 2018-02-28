@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Deploy Dev') {
             steps {
-                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev")
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
             }
         }
         stage('Smoke test dev') {
