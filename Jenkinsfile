@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Deploy Dev') {
             steps {
-                deploy([projectName:"${projectName}", jarName:"spring-petclinic-1.5.1.jar",  deploymentEnv:"dev"])
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev")
             }
         }
         stage('Smoke test dev') {
@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Deploy Staging') {
             steps {
-                deploy([projectName:"${projectName}", jarName:"spring-petclinic-1.5.1.jar",  deploymentEnv:"test"])
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
             }
         }
         stage('Smoke test Staging') {
@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Deploy Prod') {
             steps {
-                deploy([projectName:"${projectName}", jarName:"spring-petclinic-1.5.1.jar",  deploymentEnv:"prod"])
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "prod")
             }
         }
         stage('Smoke test Prod') {
