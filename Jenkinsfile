@@ -37,20 +37,28 @@ pipeline {
                 junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
-        stage("Deploy dev") {
-            parallel {
-                stage('Deploy Dev') {
-                    steps {
-                        deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
-                        smokeTest("${projectName}", "dev")
-                    }
-                }
-                stage('Deploy Staging') {
-                    steps {
-                        deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
-                        smokeTest("${projectName}", "test")
-                    }
-                }
+        stage("Deploy dev unstable") {
+            steps {
+                  deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
+                  smokeTest("${projectName}", "dev")
+            }
+        }
+        stage("IT dev unstable") {
+            steps {
+                //replace with IT tests
+                  smokeTest("${projectName}", "dev")
+            }
+        }
+        stage("Deploy dev stable") {
+            steps {
+                  deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
+                  smokeTest("${projectName}", "dev")
+            }
+        }
+        stage('Deploy Test') {
+            steps {
+                deploy("${projectName}", "spring-petclinic-1.5.1.jar", "test")
+                smokeTest("${projectName}", "test")
             }
         }
         stage('Release') {
