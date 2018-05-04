@@ -31,9 +31,15 @@ pipeline {
         stage("Deploy dev") {
             parallel {
                 stage('Deploy Dev') {
-                    steps {
-                        deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
-                        smokeTest("${projectName}", "dev")
+                    stage('Deploy') {
+                        steps {
+                            deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
+                        }
+                    }
+                    stage('Test') {
+                        steps {
+                            smokeTest("${projectName}", "dev")
+                        }
                     }
                 }
                 stage('Deploy Staging') {
