@@ -22,22 +22,26 @@ pipeline {
             //If docker agent used here, target directory disappear after build, so stash what you need to keep.
             agent { docker 'maven:3.5-alpine' }
             steps {
-                sh 'mvn clean package -T2'
-                junit '**/target/surefire-reports/TEST-*.xml'
+                sh 'mvn clean package -T2 -DskipTests'
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 stash name: "target", includes: "target/*"
+                stash name: "all", includes: "*"
+            }
+        }
+        stage('Test') {
+            //If docker agent used here, target directory disappear after build, so stash what you need to keep.
+            agent { docker 'maven:3.5-alpine' }
+            steps {
+                unstash "all"
+                sh 'mvn test -T2'
+                junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
         stage("Deploy dev") {
             parallel {
                 stage('Deploy Dev') {
-                    stage('Deploy') {
                         steps {
                             deploy("${projectName}", "spring-petclinic-1.5.1.jar", "dev", false)
-                        }
-                    }
-                    stage('Test') {
-                        steps {
                             smokeTest("${projectName}", "dev")
                         }
                     }
